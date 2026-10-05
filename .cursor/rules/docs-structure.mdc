@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+---
+
+- The /docs folder must exist and contain these files:
+    docs/architecture.md
+    docs/data_pipeline.md
+    docs/optimization.md
+    docs/backward_analysis.md
+    docs/agent_design.md
+    docs/setup.md
+- Each docs file must begin with:
+    # [Title]
+    > **Owner:** [team member]
+    > **Last updated:** [date]
+    > **Status:** Draft | In Progress | Final
+- docs/architecture.md must include:
+    - A Mermaid diagram showing module interaction and data flow
+      (Cursor can generate Mermaid — use ```mermaid blocks)
+    - The five integration contracts between team members
+    - Which session state keys the Streamlit app relies on
+- docs/data_pipeline.md must include:
+    - The 11 cleaning steps in plain English (not code)
+    - The train/test split rationale
+    - Dataset quality findings (null rates, sparse channels, currencies)
+- docs/optimization.md must include:
+    - The objective function stated mathematically and in plain English
+    - The four KKT conditions with a one-sentence plain-English explanation each
+    - Why SLSQP is used instead of CVXPY (one paragraph)
+    - Shadow price interpretation for a non-technical reader
+- docs/backward_analysis.md must include:
+    - All 7 stages described in plain English
+    - What chart or output each stage produces
+    - Why the user must confirm at Stage 7 before optimization runs
+- docs/agent_design.md must include:
+    - The agent's scope and what it refuses to answer
+    - How guardrails work (input → sanitize → LLM → output check)
+    - The three workflow phases and what the agent says in each
+- docs/setup.md must include:
+    - Step-by-step local setup from zero
+    - How to get a Gemini API key
+    - Environment variable reference table
+- Update the relevant docs file whenever you implement or change
+  the corresponding module. Docs lag is not acceptable for grading.

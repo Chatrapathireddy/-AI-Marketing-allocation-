@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["src/mmm_model.py", "src/optimizer.py", "src/baseline.py", "src/agent.py", "src/explainer.py"]

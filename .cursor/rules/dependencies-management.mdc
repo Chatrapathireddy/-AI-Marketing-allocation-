@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+
+- All project dependencies must be declared in requirements.txt.
+- Group dependencies with comments:
+    # core data
+    # streamlit ui
+    # llm / api
+    # testing
+    # utilities
+- Standard dependencies for this project:
+    pandas, numpy, scipy, scikit-learn       # core data
+    plotly, streamlit                         # streamlit ui
+    anthropic, python-dotenv                  # llm / api
+    pytest, pytest-cov                        # testing
+    pyyaml, python-magic                      # utilities
+- Do NOT add openai, fastapi, uvicorn, or httpx — this project
+  does not use them.
+- Any new dependency must:
+    - Be added to requirements.txt with a version pin (>=x.y.z)
+    - Have a one-line comment explaining why it is needed
+    - Be reflected in README.md technology stack section
+    - Be reflected in docs/setup.md if it requires special install steps
+- Flag any dependency that requires a paid API key or service
+  with a comment: # requires API key — see .env.example

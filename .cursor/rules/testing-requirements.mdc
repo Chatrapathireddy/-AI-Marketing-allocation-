@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+- Use pytest for all tests. No other test framework.
+- The test suite must maintain at least 70% coverage on Ana's modules
+  (data_prep, zip_handler, backward_analysis, guardrails, agent_prompts).
+  Teammates set their own coverage targets for their modules.
+- Every public function must have at least one test that:
+    - Verifies the success case (valid inputs → expected output)
+    - Verifies the failure case (invalid inputs → correct exception or fallback)
+- Tests must use synthetic DataFrames — do NOT depend on the real
+  conjura_mmm_data.csv being present. Use pytest fixtures with
+  small representative DataFrames instead.
+- Guardrails tests must cover:
+    - A message that should be blocked
+    - A message that should be redirected (out of scope)
+    - A message that should pass through
+    - PII redaction (email, phone)
+- When implementing a function, generate the corresponding test
+  in the same Cursor session. Do not leave functions untested.
+- Run tests with: pytest tests/ -v --tb=short
+- Do not commit if pytest exits with errors.

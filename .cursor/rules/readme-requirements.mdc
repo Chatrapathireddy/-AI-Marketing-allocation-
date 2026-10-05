@@ -1,0 +1,26 @@
+---
+description: 
+alwaysApply: true
+---
+
+- Ensure README.md exists at the project root at all times.
+- The README.md must always include these sections in this order:
+    1. Project title, course, and team
+    2. Problem statement (one paragraph — what business question are we solving?)
+    3. Technology stack (Python version, key libraries, LLM provider)
+    4. Project folder structure (tree, one line per file/folder)
+    5. How to set up locally (clone, pip install, .env, streamlit run)
+    6. How to run tests (pytest command, expected output)
+    7. Current implementation status — a table with columns:
+       Module | Owner | Status (✅ Complete / 🔄 In Progress / 🔲 Not Started)
+    8. Team roles table (member, role, files owned)
+    9. Integration contracts (who produces what, who consumes it)
+    10. Link to DEVELOPMENT_LOG.md for session-by-session progress
+- Update README.md whenever:
+    - A module changes status (not started → in progress → complete)
+    - The folder structure changes
+    - A new dependency is added
+    - A new integration contract is established
+    - Setup instructions change
+- Do not generate or modify code in a way that affects any of the above
+  without also updating README.md in the same edit session.

@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+- The README.md implementation status table must reflect reality at all times.
+- Valid status values:
+    🔲 Not Started   — stub only, no logic implemented
+    🔄 In Progress   — partially implemented, not all tests pass
+    ✅ Complete      — all functions implemented, tests pass, integrated
+- When you implement a function in any module, update the status table
+  in the same edit session. Do not mark ✅ unless:
+    - All public functions in the module have working implementations
+    - At least the basic tests for that module pass
+    - The module's integration contract output (CSV, JSON, dataclass)
+      can actually be produced by running the module
+- When a module changes from 🔲 to 🔄 or 🔄 to ✅, add a one-line
+  entry to DEVELOPMENT_LOG.md noting the status change.
+- The professor should be able to read the status table and know
+  exactly what works and what does not — no guessing.

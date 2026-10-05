@@ -1,0 +1,181 @@
+project:
+  name: "MMM Budget Allocation Agent"
+
+data:
+  raw_path: "data/raw/uploaded_dataset.csv"
+  processed_path: "data/processed/mmm_ready.csv"
+  train_path: "data/processed/mmm_train.csv"
+  test_path: "data/processed/mmm_test.csv"
+  params_path: "data/processed/channel_params.json"
+  target_column: "ALL_PURCHASES"
+  date_column: "DATE_DAY"
+  timeseries_column: "MMM_TIMESERIES_ID"
+  organisation_column: "ORGANISATION_ID"
+  test_months: 3
+  accepted_upload_formats: [".zip", ".csv"]
+  max_upload_size_mb: 200
+
+column_map:
+  google_paid_search: GOOGLE_PAID_SEARCH_SPEND
+  google_shopping: GOOGLE_SHOPPING_SPEND
+  google_pmax: GOOGLE_PMAX_SPEND
+  meta_facebook: META_FACEBOOK_SPEND
+  meta_instagram: META_INSTAGRAM_SPEND
+  google_display: GOOGLE_DISPLAY_SPEND
+  google_video: GOOGLE_VIDEO_SPEND
+  meta_other: META_OTHER_SPEND
+  tiktok: TIKTOK_SPEND
+
+dropped_columns:
+  - GOOGLE_DISPLAY_SPEND
+  - GOOGLE_VIDEO_SPEND
+  - META_OTHER_SPEND
+  - TIKTOK_SPEND
+
+llm:
+  provider: "ollama"
+  model: "llama3.1:8b"
+  base_url: "http://localhost:11434"
+  temperature: 0.2
+  max_tokens: 1024
+  scope: "marketing_optimization"
+  scope_description: >
+    This agent is scoped exclusively to marketing mix modeling and budget allocation.
+    It will not answer general knowledge questions, personal opinions, or anything
+    outside marketing analytics and optimization.
+
+guardrails:
+  input:
+    block_profanity: true
+    block_out_of_scope: true
+    block_pii: true
+    max_message_length: 2000
+    out_of_scope_redirect: >
+      I am a marketing budget optimization agent. I can help you analyze your
+      marketing spend, run optimization, and interpret the results.
+  output:
+    max_questions_per_response: 1
+    flag_opinion_leakage: true
+    flag_unverified_statistics: true
+    redact_usernames: true
+
+agent:
+  identity: "MMM Marketing Budget Allocation Agent"
+  persona: "analytical_guide"
+  cognitive_protocol: true
+  escalation_arc: true
+  first_turn_mode: true
+
+backward_analysis:
+  stages:
+    - "outcome_identification"
+    - "channel_detection"
+    - "spend_response_relationship"
+    - "saturation_check"
+    - "objective_formulation"
+    - "constraint_identification"
+    - "user_confirmation"
+  narrate_each_stage: true
+
+channels:
+  # Modeled: spend nulls → 0; included in EDA, backward analysis, optimization
+  modeled:
+    - google_paid_search
+    - google_shopping
+    - google_pmax
+    - meta_facebook
+    - meta_instagram
+  # Dropped: columns removed (too sparse for saturation curves per Conjura EDA)
+  dropped_sparse:
+    - google_display       # 85.9% null
+    - google_video         # 94.3% null
+    - meta_other           # 82.3% null
+    - tiktok               # 97.4% null
+
+fx_rates:
+  USD: 1.0
+  GBP: 1.27
+  EUR: 1.10
+  AUD: 0.67
+  JPY: 0.0071
+  HKD: 0.13
+  CAD: 0.75
+  CLP: 0.0011
+  ZAR: 0.054
+  NZD: 0.62
+  SEK: 0.097
+  DKK: 0.148
+  NOK: 0.096
+  CHF: 1.17
+
+adstock:
+  decay_rates:
+    google_paid_search: 0.3
+    google_shopping: 0.2
+    google_pmax: 0.25
+    meta_facebook: 0.4
+    meta_instagram: 0.35
+
+# MMM fit frequency — stakeholder mod uses weekly κ (USD/week).
+mmm:
+  freq: weekly
+
+# Task 2 adstock (Model C). Greg's holdout-selected λ + curves fit on effective
+# (adstocked) spend. The optimizer evaluates f(s/(1-λ)) via b_eff = b/(1-λ),
+# reusing the Model B activation enumeration (one code path covers A/B/C).
+# NOTE: values are PROVISIONAL — at portfolio scale carryover is weak and Model C
+# does not beat Model A. Greg refreshes the JSONs once D2 scale is locked; keys
+# stay identical so no rework here.
+model_c:
+  enabled: true
+  channel_params_path: "data/processed/channel_params_C.json"  # {channel: {a, b}}
+  lambdas_path: "data/processed/adstock_lambdas.json"          # {channel: lambda}
+
+# Task 1 activation (Models B/C). Values from weekly handoff (weekly train resample).
+activation:
+  thresholds:
+    google_paid_search: 18000
+    google_shopping: 15000
+    google_pmax: 18000
+    meta_facebook: 12000
+    meta_instagram: 12000
+  ceilings:
+    google_paid_search: 375516
+    google_shopping: 912392
+    google_pmax: 1232752
+    meta_facebook: 1465278
+    meta_instagram: 488104
+  kappa_sensitivity_factors: [0.8, 1.0, 1.2]
+
+optimization:
+  time_unit: weekly
+  default_budget: 831142
+  scenario_budget_activation: 90000
+  n_starts: 50
+  solver: "SLSQP"
+  tol: 1.0e-9
+  max_iter: 1000
+  channel_caps:
+    google_paid_search: null
+    google_shopping: null
+    google_pmax: null
+    meta_facebook: null
+    meta_instagram: null
+
+# Stage 1 — Bayesian Optimization for MMM hyperparameters (Lecture 7).
+# Stage 2 — SLSQP budget allocation uses optimizer.py (unchanged).
+mmm_tuning:
+  enabled: false
+  use_bo_params: false
+  n_init: 5
+  n_iter: 25
+  xi: 0.01
+  n_candidates: 5000
+  objective: test_r2
+  quality_penalty_per_flag: 0.01
+  tune_decays: false
+  output_path: "data/processed/channel_params_bo.json"
+  metadata_path: "data/processed/channel_params_bo_meta.json"
+  search_space:
+    reg_b_weight: [0.01, 0.2]
+    adstock_decay: [0.05, 0.6]

@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+- Never commit directly to main or develop.
+- Every feature, fix, or module implementation must live on its own branch.
+- Branch naming convention:
+    feature/[module-name]          e.g. feature/data-prep
+    feature/[module-name]-[detail] e.g. feature/backward-analysis-charts
+    fix/[what-was-broken]          e.g. fix/zip-handler-encoding
+    docs/[what-was-documented]     e.g. docs/architecture-diagram
+- Each branch is owned by the team member responsible for that module.
+  Do not push to another member's active branch without their knowledge.
+- Before merging to develop:
+    - README.md implementation status table must be updated
+    - DEVELOPMENT_LOG.md must have an entry for the session
+    - pytest must pass with no errors on the changed modules
+- main is merge-only from develop after the team verifies the full
+  pipeline runs end-to-end.

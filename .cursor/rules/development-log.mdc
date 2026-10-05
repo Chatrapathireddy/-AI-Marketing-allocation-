@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+---
+
+- Create DEVELOPMENT_LOG.md at the project root if it does not exist.
+- After every Cursor/Antigravity session that produces working code, add one entry.
+- Each entry must follow this exact format:
+
+  ## [DATE] — [SHORT TITLE]
+  **Branch:** feature/xxx
+  **Owner:** [Team member name]
+  **Session goal:** One sentence — what were you trying to accomplish?
+  **What was built:**
+  - Bullet list of functions/modules/pages actually implemented
+  **What still needs work:**
+  - Bullet list of remaining TODOs or known gaps
+  **Integration notes:**
+  - Any interface that changed that teammates need to know about
+  **How to test it:**
+  - Command or steps to verify the work in this session runs correctly
+
+- Do not include in DEVELOPMENT_LOG.md:
+    - Full code listings
+    - Personal opinions or frustrations
+    - Secrets, API keys, or credentials
+- The log is cumulative — newer entries go at the top.
+- If a session only fixes a bug or refactors without adding features,
+  still log it with title "Bug fix: [what was fixed]".

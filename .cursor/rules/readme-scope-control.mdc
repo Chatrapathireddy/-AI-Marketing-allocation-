@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+---
+
+- Keep README.md focused on navigation and status only.
+  A professor skimming it should understand what was built,
+  who built it, and whether it works — in under 2 minutes.
+- Do NOT include in README.md:
+    - Code blocks longer than 5 lines
+    - Full function signatures or docstrings
+    - Mathematical derivations
+    - Test output or coverage reports
+    - Detailed troubleshooting steps
+    - Long explanations of algorithms
+- Route all detail into /docs:
+    - docs/architecture.md   → system design, data flow diagram, module interaction
+    - docs/data_pipeline.md  → cleaning steps, dataset facts, column decisions
+    - docs/optimization.md   → objective function, KKT conditions, solver rationale
+    - docs/backward_analysis.md → the 7 stages explained for a non-technical reader
+    - docs/agent_design.md   → guardrails, agentic prompts, Gemini integration
+    - docs/setup.md          → extended environment setup, secrets management
+- If a change introduces content too long for README, move it to /docs
+  and add a one-line link in README: "See docs/X.md for details."

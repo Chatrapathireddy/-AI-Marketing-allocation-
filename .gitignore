@@ -1,0 +1,17 @@
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+# Live-demo sample data is committed so the deployed Streamlit app has
+# something to run when a first-time visitor clicks "Load Demo Data".
+!data/sample/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
+*.egg-info/
+.venv/
+venv/
